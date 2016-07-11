@@ -1,0 +1,73 @@
+<html>
+<head>
+</head>
+<body>
+
+    <div widget="log"></div>
+    <div widget="log2"></div>
+
+<script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../src/core.js"></script>
+<script>
+        app
+            .controller('log', ['$element', '$notify'], function($element, $notify) {
+                $notify.listen('echo:open', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:message', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:close', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:send', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:error', function(text) {
+                    append(text);
+                });
+
+                var append = function(text) {
+                    $element.append('<p> log1: ' + text + '</p>');
+                };
+            })
+            .controller('log2', ['$element', '$notify'], function($element, $notify) {
+                $notify.listen('echo:open', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:message', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:close', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:send', function(text) {
+                    append(text);
+                });
+                $notify.listen('echo:error', function(text) {
+                    append(text);
+                });
+
+                var append = function(text) {
+                    $element.append('<p>log2 :' + text + '</p>');
+                };
+            })
+            .task(['$websocket'], function($websocket) {
+                $websocket.define('echo', 'ws://localhost:9998/echo')
+                    .on('open', function() {
+                        $notify.send('echo:open', 'open');
+                    })
+                    .on('message', function() {
+                        $notify.send('echo:message', 'message');
+                    })
+                    .on('close', function() {
+                        $notify.send('echo:close', 'close');
+                    })
+                    .on('error', function() {
+                        $notify.send('echo:error', 'error');
+                    }).start();
+
+            });
+    </script>
+</body>
+</html>

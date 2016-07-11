@@ -1,0 +1,58 @@
+<html>
+<head>
+    <style>
+        .chat {
+            width: 30%;
+            margin: 5%;
+            display: inline-block;
+        }
+        .chat .window {
+            width: 100%;
+        }
+        .chat .entry {
+            width: 98%;
+            border-bottom: 1px solid #000;
+            margin: 1%;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="chat">
+    <h4>Garry's window</h4>
+    <div widget="chat-window" data-username="Garry" class="window"></div>
+    <input type="text" value="" widget="chat-input" data-username="Garry" placeholder="Entry some text" />
+</div>
+
+<div class="chat">
+    <h4>Tom's window</h4>
+    <div widget="chat-window" data-username="Tom" class="window"></div>
+    <input type="text" value="" widget="chat-input" data-username="Tom" placeholder="Entry some text" />
+</div>
+
+<script src="http://underscorejs.org/underscore-min.js"></script>
+<script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="jst.js"></script>
+<script src="../src/ui-jst-underscore.js"></script>
+<script src="../src/core.js"></script>
+<script>
+        app
+            .set('$view', new UnderscoreJSTView())
+            .controller('chat-window', ['$element', '$data', '$notify', '$view'], function($element, $data, $notify, $view) {
+                $notify.listen('chat:entry', function(message) {
+                    var name = message.username === $data.username ? 'Me' : message.username;
+                    var html = $view.compile('templates/chat-entry.html', { name : name, text : message.text });
+                    $element.append(html);
+                });
+            })
+            .controller('chat-input', ['$element', '$notify', '$data'], function($element, $notify, $data) {
+                $element.change(function(e) {
+                    e.preventDefault();
+                    $notify.send('chat:entry', { username : $data.username, text: $element.val() });
+                    $element.val('');
+                });
+            });
+    </script>
+</body>
+</html>

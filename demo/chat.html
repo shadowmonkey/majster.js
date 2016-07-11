@@ -1,0 +1,54 @@
+<html>
+<head>
+    <style>
+        .chat {
+            width: 30%;
+            margin: 5%;
+            display: inline-block;
+        }
+        .chat .window {
+            width: 100%;
+        }
+        .chat .entry {
+            width: 98%;
+            border-bottom: 1px solid #000;
+            margin: 1%;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="chat">
+    <h4>Garry's window</h4>
+    <div widget="chat-window" data-username="Garry" class="window"></div>
+    <input type="text" value="" widget="chat-input" data-username="Garry" placeholder="Entry some text" />
+</div>
+
+<div class="chat">
+    <h4>Tom's window</h4>
+    <div widget="chat-window" data-username="Tom" class="window"></div>
+    <input type="text" value="" widget="chat-input" data-username="Tom" placeholder="Entry some text" />
+</div>
+
+
+<script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../src/core.js"></script>
+<script>
+        app
+            .controller('chat-window', ['$element', '$data', '$notify'], function($element, $data, $notify) {
+                $notify.listen('chat:entry', function(message) {
+                    var name = message.username === $data.username ? 'Me' : $data.username;
+                    $element.append('<p class="entry">' + name + ': ' + message.text + '</p>');
+                });
+            })
+            .controller('chat-input', ['$element', '$notify', '$data'], function($element, $notify, $data) {
+                $element.change(function(e) {
+                    e.preventDefault();
+                    $notify.send('chat:entry', { username : $data.username, text: $element.val() });
+                    $element.val('');
+                });
+            });
+    </script>
+</body>
+</html>

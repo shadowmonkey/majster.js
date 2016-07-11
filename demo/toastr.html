@@ -1,0 +1,19 @@
+<html>
+<head>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="../src/core.js"></script>
+<script>
+        app
+            .task(['$delay'], function($delay) {
+                $delay.call(1000, function() {
+                    toastr.info('Hey! Are you sure about this?');
+                });
+            });
+    </script>
+</body>
+</html>

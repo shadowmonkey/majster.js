@@ -1,0 +1,26 @@
+<html>
+<head>
+</head>
+<body widget="auto-scan">
+    <div widget="dynamic-content"></div>
+
+<script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../src/core.js"></script>
+<script>
+        app
+            .controller('dynamic-content', ['$element', '$interval'], function($element, $interval) {
+                var i = 0;
+                $interval.set('clock', 1000, function() {
+                    $element.append('<div><p widget="content">Text' + i + ': </p></div>');
+                    if(++i >= 3) {
+                        $interval.stop('clock');
+                        $element.append('<h4 widget="content">Last message: </h4>');
+                    }
+                }).start();
+            })
+            .controller('content', ['$element'], function($element) {
+                $element.append('This is dynamic widget!');
+            });
+    </script>
+</body>
+</html>

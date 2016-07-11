@@ -1,0 +1,19 @@
+<html>
+<head>
+</head>
+<body>
+    <div widget="hello" data-text="1"></div>
+    <div widget="hello" data-text="2"></div>
+    <div widget="hello" data-text="3"></div>
+    <div widget="hello" data-text="4"></div>
+    <div widget="hello" data-text="5"></div>
+
+    <script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../src/core.js"></script>
+    <script>
+        app.controller('hello', ['$element', '$data'], function($element, $data) {
+            $element.text('hello world. data is: ' + $data.text);
+        });
+    </script>
+</body>
+</html>

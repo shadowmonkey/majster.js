@@ -1,21 +1,21 @@
 {
-  "name": "rejs",
+  "name": "master.js",
   "version": "1.0.0-beta",
   "description": "Widget based framework",
-  "main": "src/rejs.js\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dtarget\u001b[H\u001b[C\u001b[C\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C/rejs.js",
+  "main": "src/core.js\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Dtarget\u001b[H\u001b[C\u001b[C\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[B\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C/rejs.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/profoundknowladge/reJS.git"
+    "url": "git+https://github.com/profoundknowladge/master.js.git"
   },
   "author": "Profound Knowladge <maciek.jezierski@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/profoundknowladge/reJS/issues"
+    "url": "https://github.com/profoundknowladge/master.js/issues"
   },
-  "homepage": "https://github.com/profoundknowladge/reJS#readme",
+  "homepage": "https://github.com/profoundknowladge/master.js#readme",
   "devDependencies": {
     "grunt-contrib-jst": "^1.0.0"
   }

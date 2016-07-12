@@ -9,16 +9,19 @@ var js = {
         return !js.isUndefined(val);
     },
     isFunction : function(val) {
-          return $.type(val) === 'function';
+        return $.type(val) === 'function';
     },
     isNotFunction : function(val) {
-          return !js.isFunction(val);
+        return !js.isFunction(val);
+    },
+    generateUUID : function() {
+        return Math.random().toString(36).substr(2, 9);
     }
 };
 
 window.app = new function() {
      var widgets = {};
-     var mappings = [];
+     var mappings = {};
      var $params = {};
      var $tasks = [];
 
@@ -50,14 +53,31 @@ window.app = new function() {
          var callback = widget.callback;
          var params = processParams($element, widget.params);
 
-         $element.data('init', true);
+         var uid = js.generateUUID();
+
+         $element.attr('widget-init', true);
+         $element.attr('widget-uid', uid);
+
          callback.apply({}, params);
 
-         mappings.push({
+         mappings[id + uid] = {
+             uid : uid,
              widgetId : id,
              element  : $element,
              callback : callback
-         });
+         };
+     };
+
+     var remove = function($element) {
+        var widgetId = $element.attr('widget');
+        var uid = $element.attr('widget-uid');
+        var key = widgetId + uid;
+
+        if(js.isDefined(mappings[key])) {
+            mappings[key].callback = function() {};
+        } else {
+            throw new 'Element is not under framework control';
+        }
      };
 
      var proceedView = function(val) {
@@ -74,7 +94,7 @@ window.app = new function() {
 
          $element.find('[widget]').each(function() {
             var $this = $(this);
-            if(js.isUndefined($this.data('init'))) {
+            if(js.isUndefined($this.attr('widget-init'))) {
                 var widgetId = $this.attr('widget');
                 mapping($this, widgetId);
             }
@@ -129,7 +149,8 @@ window.app = new function() {
             $tasks.push({params : params, callback : callback});
             return public;
         },
-        scan : invokeWidgets
+        scan : invokeWidgets,
+        remove : remove
      };
 
      ready();
@@ -299,7 +320,7 @@ window.app = new function() {
         }
     };
 }())
-.controller('auto-scan', ['$element', '$interval', '$data'], function($component, $interval, $data) {
+.controller('auto-scan', ['$element'], function($component) {
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     var observer = new MutationObserver(function(mutations) {
     	$.each(mutations, function(index, mutation) {
@@ -307,6 +328,16 @@ window.app = new function() {
     		    $element = $(element);
     		    app.scan($element);
     		});
+    		$.each(mutation.removedNodes, function(i, element) {
+                $element = $(element);
+                if(js.isDefined($element.attr('widget'))) {
+                    app.remove($element);
+                }
+                $element.find('[widget]').each(function() {
+                    app.remove($(this));
+                });
+            });
+
     	});
     });
 

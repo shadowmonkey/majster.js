@@ -1,4 +1,4 @@
-function UnderscoreJSTView() {
+app.add('$view', function () {
     var jst = window['JST'];
     if(js.isUndefined(window['JST'])) {
         throw new 'Can\' find JST';
@@ -16,4 +16,4 @@ function UnderscoreJSTView() {
     };
 
     return public;
-}
+}());

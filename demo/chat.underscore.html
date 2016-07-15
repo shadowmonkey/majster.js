@@ -34,11 +34,9 @@
 <script src="http://underscorejs.org/underscore-min.js"></script>
 <script src="../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="jst.js"></script>
-<script src="../src/ui-jst-underscore.js"></script>
-<script src="../src/core.js"></script>
+<script src="../target/master.underscore.js"></script>
 <script>
         app
-            .set('$view', new UnderscoreJSTView())
             .controller('chat-window', ['$element', '$data', '$notify', '$view'], function($element, $data, $notify, $view) {
                 $notify.listen('chat:entry', function(message) {
                     var name = message.username === $data.username ? 'Me' : message.username;

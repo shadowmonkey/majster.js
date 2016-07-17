@@ -1,2 +1,2 @@
-# master.js
+# majster.js
 

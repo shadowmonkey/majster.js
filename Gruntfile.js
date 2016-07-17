@@ -11,11 +11,11 @@ module.exports = function(grunt) {
         concat: {
             dist: {
               src: ['src/core.js'],
-              dest: 'target/master.js',
+              dest: 'target/majster.js',
             },
             'dist-underscore': {
-              src: ['src/core.js', 'src/extension/underscore/*.js'],
-              dest: 'target/master.underscore.js',
+              src: ['src/extension/underscore/*.js'],
+              dest: 'target/majster.underscore.js',
             }
         },
 
@@ -25,8 +25,8 @@ module.exports = function(grunt) {
             },
             master: {
               files: {
-                'target/master.min.js': ['target/master.js'],
-                'target/master.underscore.min.js': ['target/master.underscore.js']
+                'target/majster.min.js': ['target/majster.js'],
+                'target/majster.underscore.min.js': ['target/majster.underscore.js']
               }
             }
         }
@@ -35,4 +35,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+
+    grunt.registerTask('default', ['concat', 'uglify']);
 };

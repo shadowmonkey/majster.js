@@ -1,6 +1,6 @@
 {
-  "name": "master.js",
-  "version": "1.0.0-beta",
+  "name": "majster.js",
+  "version": "1.0.0",
   "description": "Widget based framework",
   "main": "src/core.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/profoundknowladge/master.js.git"
+    "url": "git+https://github.com/shadowmonkey/majster.js.git"
   },
-  "author": "Profound Knowladge <maciek.jezierski@outlook.com>",
+  "author": "Shadowmonkey <maciek.jezierski@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/profoundknowladge/master.js/issues"
+    "url": "https://github.com/shadowmonkey/majster.js/issues"
   },
-  "homepage": "https://github.com/profoundknowladge/master.js#readme",
+  "homepage": "https://github.com/shadowmonkey/majster.js#readme",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "^1.0.1",

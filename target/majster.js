@@ -140,6 +140,7 @@ window.app = new function() {
         },
         define : function(name, callback) {
             callback($params[name]);
+            return public;
         },
         controller : function(widgetId, params, callback) {
            if(js.isUndefined(widgetId)) {
@@ -238,11 +239,11 @@ window.app = new function() {
             websockets[name].started = start;
             websocket.onopen = definition.open;
         }
-        if(js.isFunction(definition.open)) {
+        if(js.isFunction(definition.message)) {
             websocket.onmessage = definition.message;
         }
-        if(js.isFunction(definition.open)) {
-            websocket.close = function() {
+        if(js.isFunction(definition.close)) {
+            websocket.onclose = function() {
                  websockets[name].started = false;
                  definition.close();
             };
@@ -359,33 +360,33 @@ window.app = new function() {
           };
 
           var handleSuccess= function($target, arg) {
-              if(!_.isUndefined(arg.success)) {
+              if(js.isDefined(arg.success)) {
                   arg.success($target);
               }
-              if(!_.isUndefined(arg.errorClass)) {
+              if(js.isDefined(arg.errorClass)) {
                   $target.removeClass(arg.errorClass);
               }
 
           };
 
           var handleFailure = function($target, arg, obj) {
-              if(!_.isUndefined(arg.errorLabel) && !_.isUndefined(obj.message)) {
+              if(js.isDefined(arg.errorLabel) && js.isDefined(obj.message)) {
                   if(_.isFunction(arg.errorLabel)) {
                       arg.errorLabel($target).text(obj.message);
                   } else {
                       $element.find(arg.errorLabel).text(obj.message);
                   }
               }
-              if(!_.isUndefined(arg.errorClass)) {
+              if(js.isDefined(arg.errorClass)) {
                   $target.addClass(arg.errorClass);
               }
-              if(!_.isUndefined(arg.error)) {
+              if(js.isDefined(arg.error)) {
                   arg.error($target);
               }
           };
 
           var apply = function($target, name, arg, selector) {
-              if(!_.isUndefined(arg[name])) {
+              if(js.isDefined(arg[name])) {
                   $target.on(name, function() {
                       $.each(arg[name], function(i, obj) {
                           var result = rules[obj.rule]($target, obj);
@@ -394,7 +395,7 @@ window.app = new function() {
                               handleSuccess($target, arg);
                           } else {
                               validation[selector] = false;
-                              if(_.isUndefined(obj.silent) || !obj.silent) {
+                              if(js.isUndefined(obj.silent) || !obj.silent) {
                                   handleFailure($target, arg, obj);
                               }
                           }
@@ -413,7 +414,7 @@ window.app = new function() {
 
                   validation[selector] = false;
 
-                  if(!_.isUndefined(arg.extend)) {
+                  if(js.isDefined(arg.extend)) {
                       arg.extend(formElement);
                   }
 
@@ -452,7 +453,7 @@ window.app = new function() {
       },
 
       define : function(name, callback) {
-          if(_.isUndefined(rules[name])) {
+          if(js.isUndefined(rules[name])) {
               rules[name] = callback;
           } else {
               throw 'Rule is already defined';

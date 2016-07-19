@@ -225,11 +225,11 @@ window.app = new function() {
             websockets[name].started = start;
             websocket.onopen = definition.open;
         }
-        if(js.isFunction(definition.open)) {
+        if(js.isFunction(definition.message)) {
             websocket.onmessage = definition.message;
         }
-        if(js.isFunction(definition.open)) {
-            websocket.close = function() {
+        if(js.isFunction(definition.close)) {
+            websocket.onclose = function() {
                  websockets[name].started = false;
                  definition.close();
             };

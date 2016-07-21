@@ -24,6 +24,7 @@ window.app = new function() {
      var mappings = {};
      var $params = {};
      var $tasks = [];
+     var initFunction = function() {}
 
      var processParams = function($element, $widgetParams) {
          var params = [];
@@ -119,18 +120,27 @@ window.app = new function() {
 
      var ready = function() {
          $(document).ready(function() {
-            invokeWidgets($(document));
+            initFunction();
             invokeTasks();
+            invokeWidgets($(document));
          });
      };
 
      var public = {
+        setUp : function(callback) {
+            initFunction = callback;
+            return public;
+        },
         set : function(name , callback) {
            if(name === '$data' || name === '$element') {
               throw 'Name restricted for framework: ' + $name;
            }
            $params[name] = callback;
            return public;
+        },
+        define : function(name, callback) {
+            callback($params[name]);
+            return public;
         },
         controller : function(widgetId, params, callback) {
            if(js.isUndefined(widgetId)) {
@@ -159,12 +169,13 @@ window.app = new function() {
 .set('$notify', new function() {
   var listeners = {};
 
-  return {
+  var public =  {
       listen : function(name, callback) {
           if(js.isUndefined(listeners[name])) {
               listeners[name] = { callbacks : [] };
           }
           listeners[name].callbacks.push(callback);
+          return public;
       },
       send : function(name, params) {
           if(js.isDefined(listeners[name])) {
@@ -172,8 +183,11 @@ window.app = new function() {
                   callback(params);
               });
           }
+          return public;
       }
   };
+
+  return public;
 }())
 .set('$delay', {
     call : function(time, callback) {
@@ -225,11 +239,11 @@ window.app = new function() {
             websockets[name].started = start;
             websocket.onopen = definition.open;
         }
-        if(js.isFunction(definition.open)) {
+        if(js.isFunction(definition.message)) {
             websocket.onmessage = definition.message;
         }
-        if(js.isFunction(definition.open)) {
-            websocket.close = function() {
+        if(js.isFunction(definition.close)) {
+            websocket.onclose = function() {
                  websockets[name].started = false;
                  definition.close();
             };
@@ -319,6 +333,133 @@ window.app = new function() {
             return websocket;
         }
     };
+}())
+.set('$form', function () {
+  var rules = {};
+  return {
+      bind : function($element) {
+          var saved = {};
+          var validation = {};
+          var callbacks = {
+              valid : function() {},
+              invalid : function() {}
+          };
+
+          var trigger = function() {
+              var valid = true;
+              $.each(validation, function(selector, val) {
+                  if(!val) {
+                      valid = false;
+                  }
+              });
+              if(valid) {
+                  callbacks.valid();
+              } else {
+                  callbacks.invalid();
+              }
+          };
+
+          var handleSuccess= function($target, arg) {
+              if(js.isDefined(arg.success)) {
+                  arg.success($target);
+              }
+              if(js.isDefined(arg.errorClass)) {
+                  $target.removeClass(arg.errorClass);
+              }
+
+          };
+
+          var handleFailure = function($target, arg, obj) {
+              if(js.isDefined(arg.errorLabel) && js.isDefined(obj.message)) {
+                  if(_.isFunction(arg.errorLabel)) {
+                      arg.errorLabel($target).text(obj.message);
+                  } else {
+                      $element.find(arg.errorLabel).text(obj.message);
+                  }
+              }
+              if(js.isDefined(arg.errorClass)) {
+                  $target.addClass(arg.errorClass);
+              }
+              if(js.isDefined(arg.error)) {
+                  arg.error($target);
+              }
+          };
+
+          var apply = function($target, name, arg, selector) {
+              if(js.isDefined(arg[name])) {
+                  $target.on(name, function() {
+                      $.each(arg[name], function(i, obj) {
+                          var result = rules[obj.rule]($target, obj);
+                          if(result) {
+                              validation[selector] = true;
+                              handleSuccess($target, arg);
+                          } else {
+                              validation[selector] = false;
+                              if(js.isUndefined(obj.silent) || !obj.silent) {
+                                  handleFailure($target, arg, obj);
+                              }
+                          }
+                          trigger();
+                      });
+                  });
+              }
+          };
+
+          var public = {
+              apply : function(selector, arg) {
+                  var formElement = $element.find(selector);
+                  if(!formElement) {
+                      throw 'Can\'t find element with selector ' + selector;
+                  }
+
+                  validation[selector] = false;
+
+                  if(js.isDefined(arg.extend)) {
+                      arg.extend(formElement);
+                  }
+
+                  apply(formElement, 'click', arg, selector);
+                  apply(formElement, 'blur', arg, selector);
+                  apply(formElement, 'change', arg, selector);
+                  apply(formElement, 'focus', arg, selector);
+                  apply(formElement, 'hover', arg, selector);
+                  apply(formElement, 'keydown', arg, selector);
+                  apply(formElement, 'keyup', arg, selector);
+                  apply(formElement, 'mouseleave', arg, selector);
+                  apply(formElement, 'change', arg, selector);
+
+                  saved[selector] = { obj : formElement, arg: arg };
+
+                  return public;
+              },
+
+              clean : function(selector) {
+                  var data = saved[selector];
+                  handleSuccess(data.obj, data.arg);
+              },
+
+              ifValid : function(callback) {
+                  callbacks.valid = callback;
+                  return public;
+              },
+
+              ifInvalid : function(callback) {
+                  callbacks.invalid = callback;
+                  return public;
+              }
+          };
+
+          return public;
+      },
+
+      define : function(name, callback) {
+          if(js.isUndefined(rules[name])) {
+              rules[name] = callback;
+          } else {
+              throw 'Rule is already defined';
+          }
+      }
+  }
 }())
 .controller('auto-scan', ['$element'], function($component) {
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;

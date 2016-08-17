@@ -38,7 +38,7 @@
         app
             .controller('chat-window', ['$element', '$data', '$notify'], function($element, $data, $notify) {
                 $notify.listen('chat:entry', function(message) {
-                    var name = message.username === $data.username ? 'Me' : $data.username;
+                    var name = message.username === $data.username ? 'Me' : message.username;
                     $element.append('<p class="entry">' + name + ': ' + message.text + '</p>');
                 });
             })

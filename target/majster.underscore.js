@@ -1,19 +1,25 @@
-app.add('$view', function () {
-    var jst = window['JST'];
-    if(js.isUndefined(window['JST'])) {
-        throw new 'Can\' find JST';
+(function() {
+  var UnderscoreUI;
+
+  UnderscoreUI = (function() {
+    function UnderscoreUI(jst) {
+      this.jst = jst;
+      if (this.jst == null) {
+        throw "Can't find JST object";
+      }
     }
-    var public =  {
-        compile : function(templateName, data) {
-            var template = jst[templateName];
-            if(js.isDefined(template)) {
-                return template(data);
-            }
-            else {
-                throw new 'Can\'t find JST template : ' + templateName;
-            }
-        }
+
+    UnderscoreUI.prototype.compile = function(name, data) {
+      if (this.jst[name] == null) {
+        throw "Can't find template: " + name;
+      }
+      return this.jst[name](data);
     };
 
-    return public;
-}());
+    return UnderscoreUI;
+
+  })();
+
+  app.set('$view', new UnderscoreUI(window.JST));
+
+}).call(this);

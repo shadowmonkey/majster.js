@@ -16,7 +16,7 @@
                         $interval.stop('clock');
                         $element.append('<h4 widget="content">Last message: </h4>');
                     }
-                }).start();
+                }).start('clock');
             })
             .controller('content', ['$element'], function($element) {
                 $element.append('This is dynamic widget!');

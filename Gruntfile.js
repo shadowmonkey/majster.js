@@ -8,17 +8,6 @@ module.exports = function(grunt) {
             }
         },
 
-        concat: {
-            dist: {
-              src: ['src/core.js'],
-              dest: 'target/majster.js',
-            },
-            'dist-underscore': {
-              src: ['src/extension/underscore/*.js'],
-              dest: 'target/majster.underscore.js',
-            }
-        },
-
         uglify: {
             options: {
               mangle: false
@@ -26,15 +15,30 @@ module.exports = function(grunt) {
             master: {
               files: {
                 'target/majster.min.js': ['target/majster.js'],
-                'target/majster.underscore.min.js': ['target/majster.underscore.js']
+                'target/majster.underscore.min.js': ['target/majster.underscore.js'],
+                'target/majster.websockets.min.js': ['target/majster.websockets.js']
               }
             }
+        },
+
+        coffee : {
+            master : {
+                options : {
+                    join : true,
+                },
+                files : {
+                    'target/majster.js' : ['src/coffee/utils.coffee', 'src/coffee/majster.coffee', 'src/coffee/functions/*.coffee'],
+                    'target/majster.underscore.js' : 'src/coffee/extensions/ui-underscore.coffee',
+                    'target/majster.websockets.js' : 'src/coffee/extensions/websockets.coffee',
+                }
+            }
         }
+
     });
 
     grunt.loadNpmTasks('grunt-contrib-jst');
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-coffee');
 
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['coffee', 'uglify']);
 };

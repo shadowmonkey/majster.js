@@ -9,7 +9,7 @@
 <script src="../target/majster.js"></script>
 <script>
         app
-            .task(['$delay'], function($delay) {
+            .task('toastr', ['$delay'], function($delay) {
                 $delay.call(1000, function() {
                     toastr.info('Hey! Are you sure about this?');
                 });

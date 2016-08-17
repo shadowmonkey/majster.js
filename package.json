@@ -18,7 +18,7 @@
   "homepage": "https://github.com/shadowmonkey/majster.js#readme",
   "devDependencies": {
     "grunt": "^1.0.1",
-    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-coffee": "^1.0.0",
     "grunt-contrib-jst": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.1",
     "jquery.2": "^1.0.0"

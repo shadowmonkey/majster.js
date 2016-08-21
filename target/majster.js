@@ -163,8 +163,8 @@
   window.app = app;
 
   $(function() {
-    window.app.scan($(document));
-    return window.app.run();
+    window.app.run();
+    return window.app.scan($(document));
   });
 
   app.controller('auto-scan', ['$element'], function($component) {

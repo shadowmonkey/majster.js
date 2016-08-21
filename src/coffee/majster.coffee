@@ -84,7 +84,7 @@ app = new Majster
 window.app = app
 
 $ ->
- window.app.scan $ document
  window.app.run()
+ window.app.scan $ document
 
 
